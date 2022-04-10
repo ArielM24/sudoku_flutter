@@ -23,11 +23,10 @@ class SudokuGameController extends GetxController {
     List<SudokuCellData> data = [];
     for (int y = 0; y < 9; y++) {
       for (int x = 0; x < 9; x++) {
+        int cellValue =
+            board.cellAt(Position(row: y, column: x)).getValue() ?? 0;
         data.add(SudokuCellData(
-            x: x,
-            y: y,
-            annotations: [1, 2, 0, 0, 5, 0, 0, 8, 9],
-            value: board.cellAt(Position(row: y, column: x)).getValue()));
+            x: x, y: y, isBaseCell: cellValue > 0, value: cellValue));
       }
     }
     return data;

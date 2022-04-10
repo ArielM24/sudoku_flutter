@@ -16,4 +16,22 @@ class SudokuGame extends HiveObject {
   String toString() {
     return "$board";
   }
+
+  editCellValue(int cellIndex, int value) {
+    if (!board[cellIndex].isBaseCell) {
+      board[cellIndex].value = value;
+    }
+  }
+
+  editAnnotations(int cellIndex, int value) {
+    if (!board[cellIndex].isBaseCell) {
+      board[cellIndex].editAnnotations(value);
+    }
+  }
+
+  clearAnnotations(int cellIndex) {
+    if (!board[cellIndex].isBaseCell) {
+      board[cellIndex].clearAnnotations();
+    }
+  }
 }

@@ -12,8 +12,15 @@ class SudokuCellData extends HiveObject {
   int? value;
   @HiveType(typeId: 3)
   List<int> annotations = List.generate(9, (index) => 0);
+  @HiveType(typeId: 4)
+  bool isBaseCell = false;
 
-  SudokuCellData({this.x = 0, this.y = 0, this.value, List<int>? annotations}) {
+  SudokuCellData(
+      {this.x = 0,
+      this.y = 0,
+      this.value,
+      List<int>? annotations,
+      this.isBaseCell = false}) {
     if (annotations != null && annotations.length == 9) {
       this.annotations = annotations;
     }
@@ -33,5 +40,17 @@ class SudokuCellData extends HiveObject {
     }
 
     return "${(value ?? 0) > 0 ? value : ""}";
+  }
+
+  editAnnotations(int value) {
+    if (annotations[value - 1] > 0) {
+      annotations[value - 1] = 0;
+    } else {
+      annotations[value - 1] = value;
+    }
+  }
+
+  clearAnnotations() {
+    annotations = List<int>.generate(9, (index) => 0);
   }
 }

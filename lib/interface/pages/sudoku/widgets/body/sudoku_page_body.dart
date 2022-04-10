@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sudoku_flutter/domain/controllers/pages/sudoku_page_controller.dart';
+import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/widgets/number_buttons.dart';
+import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/widgets/speccial_button.dart';
 import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/widgets/sudoku_board.dart';
 
 class SudokuPageBody extends StatelessWidget {
@@ -12,6 +12,8 @@ class SudokuPageBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
         Center(child: SudokuBoard()),
+        NumberButtons(),
+        SpeccialButtons()
       ],
     );
   }

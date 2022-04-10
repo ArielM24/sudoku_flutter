@@ -43,6 +43,13 @@ class SudokuPageController extends GetxController {
     return null;
   }
 
+  FontWeight? getFontWeight(int cellIndex) {
+    if (cellAt(cellIndex).isBaseCell) {
+      return FontWeight.bold;
+    }
+    return null;
+  }
+
   int getIndex(int x, int y) {
     return 9 * y + x;
   }
@@ -81,5 +88,24 @@ class SudokuPageController extends GetxController {
       return const BorderSide(width: 2);
     }
     return const BorderSide(width: 0.3);
+  }
+
+  editSelectedValue(int n) {
+    if (isAnnotationMode.value) {
+      game.value.editAnnotations(selectedCell.value, n);
+    } else {
+      game.value.editCellValue(selectedCell.value, n);
+    }
+    game.refresh();
+  }
+
+  switchAnnotations() {
+    isAnnotationMode.toggle();
+  }
+
+  deleteSelectedValue() {
+    game.value.editCellValue(selectedCell.value, 0);
+    game.value.clearAnnotations(selectedCell.value);
+    game.refresh();
   }
 }
