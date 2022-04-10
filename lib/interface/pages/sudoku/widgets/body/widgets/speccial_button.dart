@@ -22,7 +22,8 @@ class SpeccialButtons extends StatelessWidget {
         }),
         ListTile(
           leading: const Icon(Icons.help_outline_outlined, color: Colors.black),
-          title: const Text("Hint", style: TextStyle(color: Colors.black)),
+          title:
+              const Text("Check cell", style: TextStyle(color: Colors.black)),
           onTap: () {},
         ),
         ListTile(

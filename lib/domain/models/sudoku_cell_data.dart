@@ -4,15 +4,15 @@ part 'sudoku_cell_data.g.dart';
 
 @HiveType(typeId: 1)
 class SudokuCellData extends HiveObject {
-  @HiveType(typeId: 0)
+  @HiveField(0)
   int x = 0;
-  @HiveType(typeId: 1)
+  @HiveField(1)
   int y = 0;
-  @HiveType(typeId: 2)
+  @HiveField(2)
   int? value;
-  @HiveType(typeId: 3)
+  @HiveField(3)
   List<int> annotations = List.generate(9, (index) => 0);
-  @HiveType(typeId: 4)
+  @HiveField(4)
   bool isBaseCell = false;
 
   SudokuCellData(

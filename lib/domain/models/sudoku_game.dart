@@ -10,7 +10,7 @@ class SudokuGame extends HiveObject {
   @HiveField(1)
   List<SudokuCellData> solvedBoard = [];
   @HiveField(2)
-  Duration? duration;
+  int totalSeconds = 0;
 
   @override
   String toString() {

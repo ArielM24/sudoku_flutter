@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sudoku_flutter/domain/database/hive_sudoku_game.dart';
+import 'package:sudoku_flutter/domain/models/sudoku_cell_data.dart';
+import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
 
 class HiveService extends GetxService {
   Future<HiveService> init() async {
@@ -13,7 +15,10 @@ class HiveService extends GetxService {
   }
 
   _initBoxes() async {
-    await Hive.openBox(HiveSudokuGame.boxName, path: await _appDirectory());
+    Hive.registerAdapter(SudokuCellDataAdapter());
+    Hive.registerAdapter(SudokuGameAdapter());
+    await Hive.openBox<SudokuGame>(HiveSudokuGame.boxName,
+        path: await _appDirectory());
     debugPrint("boxes openned");
   }
 

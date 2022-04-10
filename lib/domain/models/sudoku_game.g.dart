@@ -19,7 +19,7 @@ class SudokuGameAdapter extends TypeAdapter<SudokuGame> {
     return SudokuGame()
       ..board = (fields[0] as List).cast<SudokuCellData>()
       ..solvedBoard = (fields[1] as List).cast<SudokuCellData>()
-      ..duration = fields[2] as Duration?;
+      ..totalSeconds = fields[2] as int;
   }
 
   @override
@@ -31,7 +31,7 @@ class SudokuGameAdapter extends TypeAdapter<SudokuGame> {
       ..writeByte(1)
       ..write(obj.solvedBoard)
       ..writeByte(2)
-      ..write(obj.duration);
+      ..write(obj.totalSeconds);
   }
 
   @override

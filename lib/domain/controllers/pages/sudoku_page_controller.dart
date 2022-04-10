@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sudoku_flutter/domain/controllers/models/sudoku_game_controller.dart';
+import 'package:sudoku_flutter/domain/database/hive_sudoku_game.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_cell_data.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
 
@@ -10,11 +13,35 @@ class SudokuPageController extends GetxController {
   RxInt xSel = (-1).obs;
   RxInt ySel = (-1).obs;
   RxBool isAnnotationMode = false.obs;
+  RxString timerText = "".obs;
+  bool newGame;
+  SudokuPageController({this.newGame = true});
 
   @override
   onInit() async {
-    game.value = await SudokuGameController().generate();
+    if (newGame) {
+      game.value = await SudokuGameController().generate();
+      await HiveSudokuGame.box.put("g1", game.value);
+    } else {
+      game.value = HiveSudokuGame.box.get("g1")!;
+      debugPrint("${game.value}");
+    }
+
+    _initSudokuTimer();
     super.onInit();
+  }
+
+  _initSudokuTimer() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      game.value.totalSeconds++;
+      game.value.save();
+      // timerText.value = "00:" + ("$_currentTime").padLeft(2, "0");
+      timerText.value = Duration(seconds: game.value.totalSeconds)
+          .toString()
+          .split('.')
+          .first
+          .padLeft(8, "0");
+    });
   }
 
   selectCell(int index) {

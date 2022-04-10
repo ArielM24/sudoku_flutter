@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:sudoku_api/sudoku_api.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_cell_data.dart';
@@ -14,7 +13,6 @@ class SudokuGameController extends GetxController {
       game.board = _generateFromBoard(puzzle.board()!);
       game.solvedBoard = _generateFromBoard(puzzle.solvedBoard()!);
     }
-    debugPrint(game.toString());
 
     return game;
   }
