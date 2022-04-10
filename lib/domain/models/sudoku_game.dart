@@ -11,4 +11,9 @@ class SudokuGame extends HiveObject {
   List<SudokuCellData> solvedBoard = [];
   @HiveField(2)
   Duration? duration;
+
+  @override
+  String toString() {
+    return "$board";
+  }
 }
