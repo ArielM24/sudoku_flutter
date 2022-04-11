@@ -4,11 +4,13 @@ import 'package:sudoku_flutter/domain/controllers/pages/sudoku_page_controller.d
 import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/sudoku_page_body.dart';
 
 class SudokuPage extends StatelessWidget {
-  const SudokuPage({Key? key}) : super(key: key);
+  final bool newGame;
+  const SudokuPage({Key? key, this.newGame = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SudokuPageController controller = Get.find();
+    SudokuPageController controller =
+        Get.put(SudokuPageController(newGame: newGame));
     return WillPopScope(
       onWillPop: () async {
         controller.reset();

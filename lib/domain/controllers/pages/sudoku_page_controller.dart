@@ -9,21 +9,29 @@ import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
 import 'package:sudoku_flutter/domain/util/time_utils.dart';
 
 class SudokuPageController extends GetxController {
-  static final SudokuPageController _instance =
-      SudokuPageController._internal();
-  SudokuPageController._internal();
-  factory SudokuPageController() {
-    return _instance;
-  }
+  // static final SudokuPageController _instance =
+  //     SudokuPageController._internal();
+  // SudokuPageController._internal();
+  // factory SudokuPageController() {
+  //   return _instance;
+  // }
   Rx<SudokuGame> game = Rx<SudokuGame>(SudokuGame());
   RxInt selectedCell = (-1).obs;
   RxInt xSel = (-1).obs;
   RxInt ySel = (-1).obs;
   RxBool isAnnotationMode = false.obs;
   RxString timerText = "00:00:00".obs;
-  late Timer t;
+  Timer? t;
+  bool newGame = false;
+  SudokuPageController({this.newGame = false});
 
-  init(bool newGame) async {
+  @override
+  onInit() {
+    reload();
+    super.onInit();
+  }
+
+  reload() async {
     debugPrint("init $newGame");
     if (newGame) {
       debugPrint("generate");
@@ -39,7 +47,7 @@ class SudokuPageController extends GetxController {
   }
 
   reset() {
-    t.cancel();
+    t?.cancel();
     timerText.value = "00:00:00";
   }
 
@@ -47,7 +55,8 @@ class SudokuPageController extends GetxController {
     t = Timer.periodic(const Duration(seconds: 1), (timer) async {
       game.value.totalSeconds++;
       //debugPrint("Timer");
-      await HiveSudokuGame.box.put("g1", game.value);
+      game.value.save();
+      //HiveSudokuGame.box.put("g1", game.value);
       timerText.value = formatDuration(game.value.gameDuration);
     });
   }
