@@ -11,18 +11,42 @@ class SudokuGame extends HiveObject {
   List<SudokuCellData> solvedBoard = [];
   @HiveField(2)
   int totalSeconds = 0;
+  @HiveField(3)
+  List<int> errorIndexes = [];
 
   Duration get gameDuration => Duration(seconds: totalSeconds);
+  bool get isSolved => errorIndexes.isEmpty;
 
   @override
   String toString() {
     return "$board";
   }
 
-  editCellValue(int cellIndex, int value) {
+  setInitialErrors() {
+    for (int i = 0; i < board.length; i++) {
+      if (!isCellValid(i)) {
+        errorIndexes.add(i);
+      }
+    }
+  }
+
+  bool isCellValid(int cellIndex) {
+    return board[cellIndex].value == solvedBoard[cellIndex].value;
+  }
+
+  bool editCellValue(int cellIndex, int value) {
     if (!board[cellIndex].isBaseCell) {
       board[cellIndex].value = value;
+      if (!isCellValid(cellIndex)) {
+        if (!errorIndexes.contains(cellIndex)) {
+          errorIndexes.add(cellIndex);
+        }
+        return true;
+      } else {
+        errorIndexes.remove(cellIndex);
+      }
     }
+    return false;
   }
 
   editAnnotations(int cellIndex, int value) {

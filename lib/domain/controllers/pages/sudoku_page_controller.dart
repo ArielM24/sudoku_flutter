@@ -9,12 +9,6 @@ import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
 import 'package:sudoku_flutter/domain/util/time_utils.dart';
 
 class SudokuPageController extends GetxController {
-  // static final SudokuPageController _instance =
-  //     SudokuPageController._internal();
-  // SudokuPageController._internal();
-  // factory SudokuPageController() {
-  //   return _instance;
-  // }
   Rx<SudokuGame> game = Rx<SudokuGame>(SudokuGame());
   RxInt selectedCell = (-1).obs;
   RxInt xSel = (-1).obs;
@@ -24,10 +18,11 @@ class SudokuPageController extends GetxController {
   Timer? t;
   bool newGame = false;
   SudokuPageController({this.newGame = false});
+  bool get isSolved => game.value.isSolved;
 
   @override
-  onInit() {
-    reload();
+  onInit() async {
+    await reload();
     super.onInit();
   }
 
@@ -47,7 +42,7 @@ class SudokuPageController extends GetxController {
     } else {
       game.value = HiveSudokuGame.box.get("g1")!;
     }
-
+    _updateTimer();
     _initSudokuTimer();
   }
 
@@ -58,10 +53,16 @@ class SudokuPageController extends GetxController {
 
   _initSudokuTimer() {
     t = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      game.value.totalSeconds++;
-      game.value.save();
-      timerText.value = formatDuration(game.value.gameDuration);
+      if (!isSolved) {
+        game.value.totalSeconds++;
+        game.value.save();
+        _updateTimer();
+      }
     });
+  }
+
+  _updateTimer() {
+    timerText.value = formatDuration(game.value.gameDuration);
   }
 
   selectCell(int index) {
@@ -80,7 +81,6 @@ class SudokuPageController extends GetxController {
   }
 
   Color? getCellColor(int x, int y) {
-    //debugPrint("$index x : $x y : $y");
     if (selectedCell.value == getIndex(x, y)) {
       return Colors.blue[200];
     } else if (xSel.value == x || ySel.value == y) {
@@ -137,12 +137,23 @@ class SudokuPageController extends GetxController {
   }
 
   editSelectedValue(int n) {
-    if (isAnnotationMode.value) {
-      game.value.editAnnotations(selectedCell.value, n);
-    } else {
-      game.value.editCellValue(selectedCell.value, n);
+    if (!isSolved) {
+      if (isAnnotationMode.value) {
+        game.value.editAnnotations(selectedCell.value, n);
+      } else {
+        bool isError = game.value.editCellValue(selectedCell.value, n);
+        if (isError) {
+          debugPrint("${game.value.errorIndexes}");
+        }
+        if (isSolved) {
+          Get.defaultDialog(
+              title: "Solved",
+              content: Text(
+                  "Puzzle solved in: ${formatDuration(Duration(seconds: game.value.totalSeconds))}"));
+        }
+      }
+      game.refresh();
     }
-    game.refresh();
   }
 
   switchAnnotations() {
@@ -150,8 +161,10 @@ class SudokuPageController extends GetxController {
   }
 
   deleteSelectedValue() {
-    game.value.editCellValue(selectedCell.value, 0);
-    game.value.clearAnnotations(selectedCell.value);
-    game.refresh();
+    if (!isSolved) {
+      game.value.editCellValue(selectedCell.value, 0);
+      game.value.clearAnnotations(selectedCell.value);
+      game.refresh();
+    }
   }
 }

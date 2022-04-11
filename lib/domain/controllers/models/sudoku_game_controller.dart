@@ -12,8 +12,9 @@ class SudokuGameController extends GetxController {
     if (puzzle.board() != null) {
       game.board = _generateFromBoard(puzzle.board()!);
       game.solvedBoard = _generateFromBoard(puzzle.solvedBoard()!);
+      game.setInitialErrors();
     }
-    printGrid(puzzle.board());
+    printGrid(puzzle.solvedBoard());
 
     return game;
   }
