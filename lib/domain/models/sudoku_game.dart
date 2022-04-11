@@ -12,6 +12,8 @@ class SudokuGame extends HiveObject {
   @HiveField(2)
   int totalSeconds = 0;
 
+  Duration get gameDuration => Duration(seconds: totalSeconds);
+
   @override
   String toString() {
     return "$board";

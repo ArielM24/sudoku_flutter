@@ -8,11 +8,9 @@ class SudokuTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SudokuPageController controller = Get.find();
-    return Container(
-      child: Obx(() {
-        return Text(controller.timerText.value,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
-      }),
-    );
+    return Obx(() {
+      return Text(controller.timerText.value,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
+    });
   }
 }

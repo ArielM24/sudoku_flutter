@@ -6,41 +6,49 @@ import 'package:sudoku_flutter/domain/controllers/models/sudoku_game_controller.
 import 'package:sudoku_flutter/domain/database/hive_sudoku_game.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_cell_data.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
+import 'package:sudoku_flutter/domain/util/time_utils.dart';
 
 class SudokuPageController extends GetxController {
+  static final SudokuPageController _instance =
+      SudokuPageController._internal();
+  SudokuPageController._internal();
+  factory SudokuPageController() {
+    return _instance;
+  }
   Rx<SudokuGame> game = Rx<SudokuGame>(SudokuGame());
   RxInt selectedCell = (-1).obs;
   RxInt xSel = (-1).obs;
   RxInt ySel = (-1).obs;
   RxBool isAnnotationMode = false.obs;
-  RxString timerText = "".obs;
-  bool newGame;
-  SudokuPageController({this.newGame = true});
+  RxString timerText = "00:00:00".obs;
+  late Timer t;
 
-  @override
-  onInit() async {
+  init(bool newGame) async {
+    debugPrint("init $newGame");
     if (newGame) {
+      debugPrint("generate");
       game.value = await SudokuGameController().generate();
       await HiveSudokuGame.box.put("g1", game.value);
+      debugPrint("${game.value.isInBox}");
     } else {
       game.value = HiveSudokuGame.box.get("g1")!;
-      debugPrint("${game.value}");
+      debugPrint("${game.value.isInBox}");
     }
 
     _initSudokuTimer();
-    super.onInit();
+  }
+
+  reset() {
+    t.cancel();
+    timerText.value = "00:00:00";
   }
 
   _initSudokuTimer() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    t = Timer.periodic(const Duration(seconds: 1), (timer) async {
       game.value.totalSeconds++;
-      game.value.save();
-      // timerText.value = "00:" + ("$_currentTime").padLeft(2, "0");
-      timerText.value = Duration(seconds: game.value.totalSeconds)
-          .toString()
-          .split('.')
-          .first
-          .padLeft(8, "0");
+      //debugPrint("Timer");
+      await HiveSudokuGame.box.put("g1", game.value);
+      timerText.value = formatDuration(game.value.gameDuration);
     });
   }
 

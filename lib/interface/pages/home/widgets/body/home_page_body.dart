@@ -16,8 +16,10 @@ class HomePageBody extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-                onPressed: () {
-                  Get.put(SudokuPageController(newGame: false));
+                onPressed: () async {
+                  SudokuPageController controller = SudokuPageController();
+                  await controller.init(false);
+                  Get.put(controller);
                   Get.to(const SudokuPage());
                 },
                 child: const Text("Continue")),
@@ -25,8 +27,10 @@ class HomePageBody extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-                onPressed: () {
-                  Get.put(SudokuPageController());
+                onPressed: () async {
+                  SudokuPageController controller = SudokuPageController();
+                  await controller.init(true);
+                  Get.put(controller);
                   Get.to(const SudokuPage());
                 },
                 child: const Text("New game")),
