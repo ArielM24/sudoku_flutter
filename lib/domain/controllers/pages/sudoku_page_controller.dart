@@ -31,16 +31,21 @@ class SudokuPageController extends GetxController {
     super.onInit();
   }
 
+  @override
+  onClose() {
+    debugPrint("reset");
+    reset();
+    super.onClose();
+  }
+
   reload() async {
     debugPrint("init $newGame");
     if (newGame) {
       debugPrint("generate");
       game.value = await SudokuGameController().generate();
       await HiveSudokuGame.box.put("g1", game.value);
-      debugPrint("${game.value.isInBox}");
     } else {
       game.value = HiveSudokuGame.box.get("g1")!;
-      debugPrint("${game.value.isInBox}");
     }
 
     _initSudokuTimer();
@@ -54,9 +59,7 @@ class SudokuPageController extends GetxController {
   _initSudokuTimer() {
     t = Timer.periodic(const Duration(seconds: 1), (timer) async {
       game.value.totalSeconds++;
-      //debugPrint("Timer");
       game.value.save();
-      //HiveSudokuGame.box.put("g1", game.value);
       timerText.value = formatDuration(game.value.gameDuration);
     });
   }
@@ -65,7 +68,6 @@ class SudokuPageController extends GetxController {
     selectedCell.value = index;
     xSel.value = getXAxis(selectedCell.value);
     ySel.value = getYAxis(selectedCell.value);
-    debugPrint("selected ${selectedCell.value}");
   }
 
   SudokuCellData cellAt(int index) {

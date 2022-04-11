@@ -9,26 +9,16 @@ class SudokuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SudokuPageController controller =
-        Get.put(SudokuPageController(newGame: newGame));
-    return WillPopScope(
-      onWillPop: () async {
-        controller.reset();
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-              onPressed: () {
-                controller.reset();
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back_rounded, color: Colors.black)),
+    Get.put(SudokuPageController(newGame: newGame));
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: const BackButton(
+          color: Colors.black,
         ),
-        body: const SudokuPageBody(),
       ),
+      body: const SudokuPageBody(),
     );
   }
 }
