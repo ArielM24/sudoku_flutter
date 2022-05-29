@@ -10,7 +10,7 @@ class SudokuGameController extends GetxController {
     int? clues;
     String pattern = "random";
     if (difficulty == Difficulty.easy) {
-      clues = 80;
+      clues = 45;
     } else if (difficulty == Difficulty.normal) {
       clues = 35;
     } else if (difficulty == Difficulty.spring) {
