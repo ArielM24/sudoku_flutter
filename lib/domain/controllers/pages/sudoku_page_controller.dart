@@ -37,17 +37,17 @@ class SudokuPageController extends GetxController {
     super.onClose();
   }
 
-  reload() async {
+  reload({bool newGame = true}) async {
     debugPrint("init $newGame");
     if (newGame) {
       debugPrint("generate");
       game.value = await SudokuGameController().generate(difficulty);
       await HiveSudokuGame.box.put("g1", game.value);
+      resetTimer();
+      _initSudokuTimer();
     } else {
       game.value = HiveSudokuGame.box.get("g1")!;
     }
-    resetTimer();
-    _initSudokuTimer();
     return true;
   }
 
@@ -67,7 +67,6 @@ class SudokuPageController extends GetxController {
   }
 
   _updateTimer() {
-    debugPrint("update");
     timerText.value = formatDuration(game.value.gameDuration);
   }
 

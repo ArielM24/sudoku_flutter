@@ -24,7 +24,7 @@ class SudokuPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-          future: controller.reload(),
+          future: controller.reload(newGame: newGame),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SudokuPageBody(
