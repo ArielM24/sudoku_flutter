@@ -5,19 +5,26 @@ import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/widgets/specc
 import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/widgets/sudoku_board.dart';
 import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/widgets/sudoku_timer.dart';
 
+import 'widgets/conffeti_overlay.dart';
+
 class SudokuPageBody extends StatelessWidget {
   final Difficulty difficulty;
   const SudokuPageBody({Key? key, required this.difficulty}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
       children: [
-        const SudokuTimer(),
-        Center(child: SudokuBoard(difficulty: difficulty)),
-        const NumberButtons(),
-        const SpecialButtons()
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SudokuTimer(),
+            Center(child: SudokuBoard(difficulty: difficulty)),
+            const NumberButtons(),
+            const SpecialButtons()
+          ],
+        ),
+        const ConfettiOverlay()
       ],
     );
   }

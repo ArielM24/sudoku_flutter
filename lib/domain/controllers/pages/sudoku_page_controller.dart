@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sudoku_flutter/domain/controllers/models/sudoku_game_controller.dart';
@@ -20,6 +21,8 @@ class SudokuPageController extends GetxController {
   Timer? timer;
   Rx<Color> checkColor = Rx<Color>(Colors.black);
   Rx<Icon?> checkIcon = Rx<Icon?>(null);
+  ConfettiController confettiController =
+      ConfettiController(duration: const Duration(seconds: 5));
 
   bool get isSolved => game.value.isSolved;
 
@@ -32,7 +35,10 @@ class SudokuPageController extends GetxController {
   @override
   onClose() {
     debugPrint("reset");
+    confettiController =
+        ConfettiController(duration: const Duration(seconds: 5));
     resetTimer();
+    confettiController.dispose();
     super.onClose();
   }
 
@@ -151,9 +157,10 @@ class SudokuPageController extends GetxController {
           debugPrint("${game.value.errorIndexes}");
         }
         if (isSolved) {
-          Get.dialog(SolvedDialog(
+          confettiController.play();
+          2.seconds.delay().then((_) => Get.dialog(SolvedDialog(
               time:
-                  formatDuration(Duration(seconds: game.value.totalSeconds))));
+                  formatDuration(Duration(seconds: game.value.totalSeconds)))));
         }
       }
       game.refresh();
