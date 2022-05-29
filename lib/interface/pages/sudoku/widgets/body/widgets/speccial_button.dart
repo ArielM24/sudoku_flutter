@@ -20,12 +20,14 @@ class SpecialButtons extends StatelessWidget {
             onTap: controller.switchAnnotations,
           );
         }),
-        ListTile(
-          leading: const Icon(Icons.help_outline_outlined, color: Colors.black),
-          title:
-              const Text("Check cell", style: TextStyle(color: Colors.black)),
-          onTap: () {},
-        ),
+        Obx(() => ListTile(
+              leading: Icon(Icons.help_outline_outlined,
+                  color: controller.checkColor.value),
+              trailing: controller.checkIcon.value,
+              title: Text("Check cell",
+                  style: TextStyle(color: controller.checkColor.value)),
+              onTap: controller.checkSelectedCell,
+            )),
         ListTile(
           leading: const Icon(Icons.backspace_sharp, color: Colors.black),
           title: const Text("Delete cell data",

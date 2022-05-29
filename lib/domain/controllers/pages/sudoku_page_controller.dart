@@ -8,6 +8,7 @@ import 'package:sudoku_flutter/domain/enums/difficulty.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_cell_data.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
 import 'package:sudoku_flutter/domain/util/time_utils.dart';
+import 'package:sudoku_flutter/interface/widgets/dialogs/solved_dialog.dart';
 
 class SudokuPageController extends GetxController {
   Rx<SudokuGame> game = Rx<SudokuGame>(SudokuGame());
@@ -17,6 +18,8 @@ class SudokuPageController extends GetxController {
   RxBool isAnnotationMode = false.obs;
   RxString timerText = "00:00:00".obs;
   Timer? timer;
+  Rx<Color> checkColor = Rx<Color>(Colors.black);
+  Rx<Icon?> checkIcon = Rx<Icon?>(null);
 
   bool get isSolved => game.value.isSolved;
 
@@ -148,10 +151,9 @@ class SudokuPageController extends GetxController {
           debugPrint("${game.value.errorIndexes}");
         }
         if (isSolved) {
-          Get.defaultDialog(
-              title: "Solved",
-              content: Text(
-                  "Puzzle solved in: ${formatDuration(Duration(seconds: game.value.totalSeconds))}"));
+          Get.dialog(SolvedDialog(
+              time:
+                  formatDuration(Duration(seconds: game.value.totalSeconds))));
         }
       }
       game.refresh();
@@ -168,5 +170,18 @@ class SudokuPageController extends GetxController {
       game.value.clearAnnotations(selectedCell.value);
       game.refresh();
     }
+  }
+
+  void checkSelectedCell() {
+    bool valid = game.value.isCellValid(selectedCell.value);
+    debugPrint("valid $valid");
+    checkColor.value = valid ? Colors.green : Colors.red;
+    checkIcon.value = valid
+        ? const Icon(Icons.check_outlined, color: Colors.green)
+        : const Icon(Icons.error_outline, color: Colors.red);
+    2.seconds.delay().then((_) {
+      checkColor.value = Colors.black;
+      checkIcon.value = null;
+    });
   }
 }

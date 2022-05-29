@@ -22,7 +22,6 @@ class SudokuGameController extends GetxController {
     } else if (difficulty == Difficulty.winter) {
       pattern = "winter";
     }
-    debugPrint("$pattern");
     PuzzleOptions options = PuzzleOptions(clues: clues, patternName: pattern);
     Puzzle puzzle = Puzzle(options);
     await puzzle.generate();
