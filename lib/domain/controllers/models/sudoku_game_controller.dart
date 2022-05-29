@@ -1,11 +1,18 @@
 import 'package:get/get.dart';
 import 'package:sudoku_api/sudoku_api.dart';
+import 'package:sudoku_flutter/domain/enums/difficulty.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_cell_data.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
 
 class SudokuGameController extends GetxController {
-  Future<SudokuGame> generate() async {
-    PuzzleOptions options = PuzzleOptions();
+  Future<SudokuGame> generate(Difficulty difficulty) async {
+    int? clues;
+    if (difficulty == Difficulty.easy) {
+      clues = 45;
+    } else if (difficulty == Difficulty.normal) {
+      clues = 35;
+    }
+    PuzzleOptions options = PuzzleOptions(clues: clues);
     Puzzle puzzle = Puzzle(options);
     await puzzle.generate();
     SudokuGame game = SudokuGame();

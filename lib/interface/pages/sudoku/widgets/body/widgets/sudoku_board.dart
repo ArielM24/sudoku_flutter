@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sudoku_flutter/domain/controllers/pages/sudoku_page_controller.dart';
+import 'package:sudoku_flutter/domain/enums/difficulty.dart';
 import 'package:sudoku_flutter/interface/pages/sudoku/widgets/body/widgets/sudoku_cell.dart';
 
 class SudokuBoard extends StatelessWidget {
-  const SudokuBoard({Key? key}) : super(key: key);
+  final Difficulty difficulty;
+  const SudokuBoard({Key? key, required this.difficulty}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

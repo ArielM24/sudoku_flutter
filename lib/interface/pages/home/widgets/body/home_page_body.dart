@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sudoku_flutter/interface/pages/difficulty/difficulty_page.dart';
 import 'package:sudoku_flutter/interface/pages/sudoku/sudoku_page.dart';
+import 'package:sudoku_flutter/interface/widgets/buttons/expanded_button.dart';
 
 class HomePageBody extends StatelessWidget {
   const HomePageBody({Key? key}) : super(key: key);
@@ -12,29 +14,13 @@ class HomePageBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-                onPressed: () async {
-                  Get.to(const SudokuPage());
-                },
-                child: const Text("Continue")),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-                onPressed: () async {
-                  Get.to(const SudokuPage(
-                    newGame: true,
-                  ));
-                },
-                child: const Text("New game")),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:
-                ElevatedButton(onPressed: () {}, child: const Text("Options")),
-          ),
+          ExpandedButton(
+              onPressed: () => Get.to(const SudokuPage()), text: "Continue"),
+          ExpandedButton(
+              onPressed: () => Get.to(const DifficultyPage()),
+              text: "New game"),
+          ExpandedButton(
+              onPressed: () => Get.to(const DifficultyPage()), text: "Options"),
         ],
       ),
     );

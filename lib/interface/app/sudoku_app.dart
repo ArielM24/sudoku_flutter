@@ -10,6 +10,7 @@ class SudokuApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       home: AnimatedSplashScreen.withScreenFunction(
         splashIconSize: 280,
         splash: Column(

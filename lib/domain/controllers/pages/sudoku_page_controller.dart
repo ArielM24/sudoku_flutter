@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sudoku_flutter/domain/controllers/models/sudoku_game_controller.dart';
 import 'package:sudoku_flutter/domain/database/hive_sudoku_game.dart';
+import 'package:sudoku_flutter/domain/enums/difficulty.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_cell_data.dart';
 import 'package:sudoku_flutter/domain/models/sudoku_game.dart';
 import 'package:sudoku_flutter/domain/util/time_utils.dart';
@@ -15,9 +16,12 @@ class SudokuPageController extends GetxController {
   RxInt ySel = (-1).obs;
   RxBool isAnnotationMode = false.obs;
   RxString timerText = "00:00:00".obs;
-  Timer? t;
+  Timer? timer;
   bool newGame = false;
-  SudokuPageController({this.newGame = false});
+  Difficulty difficulty;
+
+  SudokuPageController(
+      {this.newGame = false, this.difficulty = Difficulty.normal}) {}
   bool get isSolved => game.value.isSolved;
 
   @override
@@ -29,7 +33,7 @@ class SudokuPageController extends GetxController {
   @override
   onClose() {
     debugPrint("reset");
-    reset();
+    resetTimer();
     super.onClose();
   }
 
@@ -37,22 +41,23 @@ class SudokuPageController extends GetxController {
     debugPrint("init $newGame");
     if (newGame) {
       debugPrint("generate");
-      game.value = await SudokuGameController().generate();
+      game.value = await SudokuGameController().generate(difficulty);
       await HiveSudokuGame.box.put("g1", game.value);
     } else {
       game.value = HiveSudokuGame.box.get("g1")!;
     }
-    _updateTimer();
+    resetTimer();
     _initSudokuTimer();
+    return true;
   }
 
-  reset() {
-    t?.cancel();
+  resetTimer() {
+    timer?.cancel();
     timerText.value = "00:00:00";
   }
 
   _initSudokuTimer() {
-    t = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (!isSolved) {
         game.value.totalSeconds++;
         game.value.save();
@@ -62,6 +67,7 @@ class SudokuPageController extends GetxController {
   }
 
   _updateTimer() {
+    debugPrint("update");
     timerText.value = formatDuration(game.value.gameDuration);
   }
 

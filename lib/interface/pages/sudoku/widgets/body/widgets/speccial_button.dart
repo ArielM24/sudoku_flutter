@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sudoku_flutter/domain/controllers/pages/sudoku_page_controller.dart';
 
-class SpeccialButtons extends StatelessWidget {
-  const SpeccialButtons({Key? key}) : super(key: key);
+class SpecialButtons extends StatelessWidget {
+  const SpecialButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

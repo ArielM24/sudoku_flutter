@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   sudoku_api: ^2.0.0
   hive: ^2.1.0
-  get: ^4.6.1
+  get: ^4.6.5
   animated_splash_screen: ^1.2.0
   build_runner: ^2.1.8
   hive_generator: ^1.1.2
