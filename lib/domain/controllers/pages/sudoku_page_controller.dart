@@ -17,11 +17,7 @@ class SudokuPageController extends GetxController {
   RxBool isAnnotationMode = false.obs;
   RxString timerText = "00:00:00".obs;
   Timer? timer;
-  bool newGame = false;
-  Difficulty difficulty;
 
-  SudokuPageController(
-      {this.newGame = false, this.difficulty = Difficulty.normal}) {}
   bool get isSolved => game.value.isSolved;
 
   @override
@@ -37,12 +33,13 @@ class SudokuPageController extends GetxController {
     super.onClose();
   }
 
-  reload({bool newGame = true}) async {
+  reload(
+      {bool newGame = true, Difficulty difficulty = Difficulty.normal}) async {
     debugPrint("init $newGame");
     if (newGame) {
       debugPrint("generate");
       game.value = await SudokuGameController().generate(difficulty);
-      await HiveSudokuGame.box.put("g1", game.value);
+      HiveSudokuGame.box.put("g1", game.value);
       resetTimer();
       _initSudokuTimer();
     } else {

@@ -10,7 +10,6 @@ class SudokuCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SudokuPageController controller = Get.find();
-
     return Obx(() {
       int x = controller.getXAxis(cellIndex);
       int y = controller.getYAxis(cellIndex);
@@ -36,6 +35,7 @@ class SudokuCell extends StatelessWidget {
                     child: Text(
                   controller.valueAtIndex(cellIndex),
                   style: TextStyle(
+                      fontSize: 18,
                       fontWeight: controller.getFontWeight(cellIndex)),
                 )),
               ),

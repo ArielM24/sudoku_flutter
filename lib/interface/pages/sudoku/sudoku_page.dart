@@ -13,8 +13,7 @@ class SudokuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SudokuPageController controller =
-        Get.put(SudokuPageController(newGame: newGame));
+    SudokuPageController controller = Get.put(SudokuPageController());
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -24,8 +23,9 @@ class SudokuPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-          future: controller.reload(newGame: newGame),
+          future: controller.reload(newGame: newGame, difficulty: difficulty),
           builder: (context, snapshot) {
+            debugPrint("${snapshot.hasData}");
             if (snapshot.hasData) {
               return SudokuPageBody(
                 difficulty: difficulty,

@@ -24,7 +24,7 @@ class NumberButtons extends StatelessWidget {
                   : Colors.black;
               return Text(
                 "$i",
-                style: TextStyle(color: color),
+                style: TextStyle(color: color, fontSize: 18),
               );
             })))
         ],

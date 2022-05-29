@@ -44,6 +44,42 @@ class DifficultyPage extends StatelessWidget {
                   }));
                 },
                 text: "Easy"),
+            ExpandedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const SudokuPage(
+                        newGame: true, difficulty: Difficulty.spring);
+                  }));
+                },
+                text: "Spring"),
+            ExpandedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const SudokuPage(
+                        newGame: true, difficulty: Difficulty.summer);
+                  }));
+                },
+                text: "Summer"),
+            ExpandedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const SudokuPage(
+                        newGame: true, difficulty: Difficulty.fall);
+                  }));
+                },
+                text: "Fall"),
+            ExpandedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const SudokuPage(
+                        newGame: true, difficulty: Difficulty.winter);
+                  }));
+                },
+                text: "Winter"),
           ],
         ),
       ),

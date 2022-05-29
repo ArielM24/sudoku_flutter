@@ -15,15 +15,40 @@ class SudokuBoard extends StatelessWidget {
     return SizedBox(
       height: 270,
       width: 270,
-      child: Obx(() {
-        return GridView.count(
-          crossAxisCount: 9,
-          children: [
-            for (int i = 0; i < controller.game.value.board.length; i++)
-              SudokuCell(cellIndex: i)
-          ],
-        );
-      }),
+      child: FutureBuilder(
+          future: _paintBoard(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Obx(() {
+                return GridView.count(
+                  crossAxisCount: 9,
+                  children: [
+                    for (int i = 0; i < controller.game.value.board.length; i++)
+                      SudokuCell(cellIndex: i)
+                  ],
+                );
+              });
+            }
+            return Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.grid_on),
+                  SizedBox(width: 10),
+                  Text("Loading"),
+                ],
+              ),
+            );
+          }),
     );
+  }
+
+  Future<List<Widget>> _paintBoard() async {
+    SudokuPageController controller = Get.find();
+    List<Widget> board = [];
+    for (int i = 0; i < controller.game.value.board.length; i++) {
+      board.add(SudokuCell(cellIndex: i));
+    }
+    return board;
   }
 }
